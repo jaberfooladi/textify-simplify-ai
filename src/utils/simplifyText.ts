@@ -1,4 +1,4 @@
-// API wrapper for the Python-based OpenAI text simplification
+// API wrapper for the Python-based Llama 3.2 text simplification
 
 export const simplifyText = async (text: string): Promise<string> => {
   try {
