@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
 import { simplifyText, generateSampleText } from '@/utils/simplifyText';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Copy, RotateCcw, Sparkles, ArrowRight } from 'lucide-react';
+import { Copy, RotateCcw, Sparkles, ArrowRight, AlertCircle } from 'lucide-react';
 import TextTransition from '@/components/TextTransition';
 
 const TextSimplifier = () => {
@@ -14,6 +14,7 @@ const TextSimplifier = () => {
   const [outputText, setOutputText] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   
   const handleSimplify = async () => {
@@ -28,11 +29,12 @@ const TextSimplifier = () => {
     
     setIsProcessing(true);
     setOutputText('');
+    setError(null);
     
     try {
       const result = await simplifyText(inputText);
       
-      // Simulate gradual text appearance for a better UX
+      // Display the result with a typing effect
       let displayText = '';
       const textArray = result.split('');
       
@@ -43,9 +45,15 @@ const TextSimplifier = () => {
       }
       
     } catch (error) {
+      setError(
+        error instanceof Error 
+          ? error.message 
+          : "Failed to simplify text. Please check your API configuration and try again."
+      );
+      
       toast({
         title: "Error",
-        description: "Failed to simplify text. Please try again.",
+        description: "Failed to simplify text. Please check the API configuration.",
         variant: "destructive",
       });
       console.error(error);
@@ -165,7 +173,16 @@ const TextSimplifier = () => {
                 <div 
                   className="min-h-[250px] flex-1 rounded-md bg-transparent p-3 text-sm whitespace-pre-wrap overflow-auto"
                 >
-                  {outputText || (
+                  {error ? (
+                    <div className="text-destructive h-full flex items-center justify-center text-center p-6">
+                      <div>
+                        <AlertCircle className="h-6 w-6 mx-auto mb-3 opacity-50" />
+                        <p>{error}</p>
+                      </div>
+                    </div>
+                  ) : outputText ? (
+                    outputText
+                  ) : (
                     <div className="text-muted-foreground h-full flex items-center justify-center text-center p-6">
                       <div>
                         <ArrowRight className="h-6 w-6 mx-auto mb-3 opacity-50" />
@@ -193,7 +210,7 @@ const TextSimplifier = () => {
       
       <TextTransition delay={300} className="mt-12 text-center">
         <p className="text-sm text-muted-foreground">
-          This AI model converts complex text into simpler language while preserving the original meaning.
+          Powered by OpenAI's GPT API to provide accurate text simplification while preserving meaning.
         </p>
       </TextTransition>
     </div>

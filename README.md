@@ -1,69 +1,38 @@
-# Welcome to your Lovable project
 
-## Project info
+# Text Simplification App
 
-**URL**: https://lovable.dev/projects/f2a9d3d9-283b-4d99-972b-f519da0d9658
+This application uses OpenAI's GPT API to simplify complex text into easier-to-understand language.
 
-## How can I edit this code?
+## Setup
 
-There are several ways of editing your application.
+1. Clone this repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Set your OpenAI API key as an environment variable:
+   - For local development, create a `.env` file in the root of your project with:
+     ```
+     OPENAI_API_KEY=your_api_key_here
+     ```
+   - For production, set the environment variable in your hosting platform
 
-**Use Lovable**
+4. Run the development server:
+   ```
+   npm run dev
+   ```
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f2a9d3d9-283b-4d99-972b-f519da0d9658) and start prompting.
+## API Usage
 
-Changes made via Lovable will be committed automatically to this repo.
+The application uses a Python serverless function to handle the OpenAI API requests. The function is located in `api/simplify_text.py`.
 
-**Use your preferred IDE**
+## Deployment
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+When deploying to platforms like Vercel or Netlify, make sure to:
+1. Set the `OPENAI_API_KEY` environment variable in your project settings
+2. Deploy both the frontend and the API functions
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## GitHub Repository
 
-Follow these steps:
+This project can be deployed directly from GitHub to most hosting platforms. Make sure to keep your API key secure and never commit it to your repository.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/f2a9d3d9-283b-4d99-972b-f519da0d9658) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
