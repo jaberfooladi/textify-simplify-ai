@@ -1,3 +1,4 @@
+
 // API wrapper for the Python-based Llama 3.2 text simplification
 
 export const simplifyText = async (text: string): Promise<string> => {
@@ -12,11 +13,27 @@ export const simplifyText = async (text: string): Promise<string> => {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.error || 'Failed to simplify text');
+      const errorText = await response.text();
+      let errorMessage = 'Failed to simplify text';
+      
+      try {
+        // Try to parse the error as JSON
+        const errorData = JSON.parse(errorText);
+        errorMessage = errorData.error || errorMessage;
+      } catch (parseError) {
+        // If parsing fails, use the raw text
+        errorMessage = errorText || errorMessage;
+      }
+      
+      throw new Error(errorMessage);
     }
 
-    const data = await response.json();
+    const responseText = await response.text();
+    if (!responseText) {
+      throw new Error('Empty response received from server');
+    }
+    
+    const data = JSON.parse(responseText);
     return data.simplified_text;
   } catch (error) {
     console.error('Error simplifying text:', error);

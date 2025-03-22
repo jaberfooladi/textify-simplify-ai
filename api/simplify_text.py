@@ -3,7 +3,6 @@ import os
 import json
 from http.server import BaseHTTPRequestHandler
 from ollama import chat
-from ollama.types import ChatResponse
 
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -22,7 +21,7 @@ class handler(BaseHTTPRequestHandler):
         
         try:
             # Make the API call to the local Llama 3.2 model using Ollama
-            response: ChatResponse = chat(
+            response = chat(
                 model='llama3.2', 
                 messages=[
                     {
@@ -43,8 +42,11 @@ class handler(BaseHTTPRequestHandler):
             self.send_header('Access-Control-Allow-Headers', 'Content-Type')
             self.end_headers()
             
+            # Create a valid JSON response
+            response_data = json.dumps({"simplified_text": simplified_text})
+            
             # Send the response
-            self.wfile.write(json.dumps({"simplified_text": simplified_text}).encode())
+            self.wfile.write(response_data.encode())
             
         except Exception as e:
             # Handle errors
@@ -52,7 +54,10 @@ class handler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
             self.end_headers()
-            self.wfile.write(json.dumps({"error": str(e)}).encode())
+            
+            # Ensure error response is properly formatted JSON
+            error_response = json.dumps({"error": str(e)})
+            self.wfile.write(error_response.encode())
     
     def do_OPTIONS(self):
         # Handle CORS preflight requests
